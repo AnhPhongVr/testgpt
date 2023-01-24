@@ -1,0 +1,39 @@
+﻿<div id="chat-widget">
+  <form>
+    <label for="prompt">Question:</label>
+    <input type="text" id="prompt" name="prompt" placeholder="Enter your question here">
+    <button type="submit">Submit</button>
+  </form>
+  <div id="response"></div>
+</div>
+<script>
+const apiKey = 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';
+const endpoint = `https://api.openai.com/v1/engines/davinci/completions`;
+
+const form = document.querySelector('#chat-widget form');
+const responseContainer = document.querySelector('#chat-widget #response');
+
+form.addEventListener('submit', (event) => {
+  event.preventDefault();
+  const prompt = form.prompt.value;
+
+  const options = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${apiKey}`
+    },
+    body: JSON.stringify({
+      prompt: prompt,
+      max_tokens: 2048
+    })
+  };
+
+  fetch(endpoint, options)
+    .then(response => response.json())
+    .then(data => {
+      const result = data.choices[0].text;
+      responseContainer.innerHTML = result;
+    });
+});
+</script>
